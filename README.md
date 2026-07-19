@@ -124,11 +124,17 @@ User lands on MentorFi
 └─────────────────────────────────────────────────────────────────────┘
 
 **FUTURE SCOPE**
+
 User authentication — migrate from single-tenant to multi-tenant ; schema already supports adding user_id + auth.uid() RLS policies
+
 Recurring transaction tracking — new transactions table, auto-categorize into Needs/Savings/Wants, monthly cash-flow dashboard
+
 Gamification — goal milestones (25/50/75/100%), savings streaks, "Financial Health Score" (0–100)
+
 Multilingual support — Hindi, Tamil, Telugu, Bengali, Marathi interfaces + AI responses
+
 Personalized AI insights — weekly generated insights from user's actual transaction + goal data ("Your emergency fund is at 1.2 months — target 3")
+
 WhatsApp/Telegram bot — port AI mentor to where users already are; most young Indians use WhatsApp daily
-Voice-first interface — Web Speech API for voice input/output, critical for lower-literacy users
+
 Credit score education — CIBIL/Experian integration with consent, paired with credit card module
