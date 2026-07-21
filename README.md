@@ -39,89 +39,107 @@ Chat history persists to Bolt Database — conversations continue across session
 | **AI / Server Logic** | Database Edge Functions (Deno) |
 | **Persistence** | Database with Row Level Security (RLS) |
 
-**WORK FLOW**
-'''text
-User lands on MentorFi
-        │
-        ▼
-┌─────────────────────────────────────────────────┐
-│  Landing Page — understands the problem         │
-│  Clicks "Get Started Free"                      │
-└─────────────────────────────────────────────────┘
-        │
-        ▼
-┌─────────────────────────────────────────────────┐
-│  Budget Planner — enters salary + city + expenses│
-│  → Gets personalized 50/30/20 budget + tips     │
-└─────────────────────────────────────────────────┘
-        │
-        ▼
-┌─────────────────────────────────────────────────┐
-│  Goal Tracker — creates goals (e.g. emergency   │
-│  fund ₹90k, bike ₹1L) → Database persists them  │
-│  → Sees progress bars + months-to-goal          │
-└─────────────────────────────────────────────────┘
-        │
-        ▼
-┌─────────────────────────────────────────────────┐
-│  EMI Detector — evaluating a phone/bike EMI     │
-│  → App computes total interest + salary impact  │
-│  → Flags Safe / Caution / Danger                │
-└─────────────────────────────────────────────────┘
-        │
-        ▼
-┌─────────────────────────────────────────────────┐
-│  Ask MentorFi — asks "What is a SIP?"           │
-│  → Edge function returns structured answer      │
-│  → Conversation saved to Bolt Database               │
-└─────────────────────────────────────────────────┘
-'''
-**SYSTEM ARCHITECTURE**
+## 🔄 WORK FLOW
 
-┌─────────────────────────────────────────────────────────────────────┐
-│                        CLIENT (Browser)                             │
-│                                                                     │
-│   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌──────────┐ │
-│   │ Navigation  │  │ LandingPage │  │ BudgetPlan  │  │ EMI Det. │ │
-│   │ Component   │  │ Component   │  │ Component   │  │ Component│ │
-│   └─────────────┘  └─────────────┘  └─────────────┘  └──────────┘ │
-│   ┌─────────────┐  ┌─────────────┐                                │
-│   │ GoalTracker │  │   AIChat    │  ┌─────────────┐               │
-│   │ Component   │  │ Component   │  │ KnowledgeHub│               │
-│   └─────────────┘  └─────────────┘  └─────────────┘               │
-│         │                │                                        │
-│         ▼                ▼                                         │
-│   ┌──────────────────────────────────┐                             │
-│   │      src/lib/supabase.ts         │  ← Bolt Database JS clie    │
-│   │   (singleton instance + types)   │    (anon key auth)          │
-│   └──────────────────────────────────┘                             │
-│         │                          │                               │
-└─────────┼──────────────────────────┼───────────────────────────────┘
-          │                          │
-          │ HTTPS (REST)             │ HTTPS (fetch)
-          │ Database PostgREST       │ Edge Function invoke
-          ▼                          ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                     Database BACKEND                                │
-│                                                                     │
-│   ┌─────────────────────┐    ┌──────────────────────────────┐      │
-│   │   PostgreSQL DB     │    │   Edge Functions (Deno)      │      │
-│   │                     │    │                              │      │
-│   │  ┌───────────────┐  │    │   ┌────────────────────────┐ │      │
-│   │  │ goals         │  │    │   │   ai-mentor            │ │      │
-│   │  ├───────────────┤  │    │   │                        │ │      │
-│   │  │ chat_messages │  │    │   │  • Knowledge base      │ │      │
-│   │  ├───────────────┤  │    │   │    (13 topics)         │ │      │
-│   │  │ budget_plans  │  │    │   │  • Pattern matcher     │ │      │
-│   │  ├───────────────┤  │    │   │  • Fallback handler    │ │      │
-│   │  │ emi_analyses  │  │    │   │  • CORS middleware     │ │      │
-│   │  └───────────────┘  │    │   └────────────────────────┘ │      │
-│   │                     │    └──────────────────────────────┘      │
-│   │  Row Level Security │                                           │
-│   │  (RLS policies on   │                                           │
-│   │   every table)      │                                           │
-│   └─────────────────────┘                                           │
-└─────────────────────────────────────────────────────────────────────┘
+```text
+User lands on MentorFi
+        |
+        v
++----------------------------------------------+
+| Landing Page - understands the problem       |
+| Clicks "Get Started Free"                    |
++----------------------------------------------+
+        |
+        v
++----------------------------------------------+
+| Budget Planner - enters salary + city        |
+| + expenses                                   |
+| -> Gets personalized 50/30/20 budget + tips  |
++----------------------------------------------+
+        |
+        v
++----------------------------------------------+
+| Goal Tracker - creates goals                 |
+| (e.g. emergency fund Rs.90k, bike Rs.1L)     |
+| -> Database persists them                    |
+| -> Sees progress bars + months-to-goal       |
++----------------------------------------------+
+        |
+        v
++----------------------------------------------+
+| EMI Detector - evaluates a phone/bike EMI    |
+| -> Computes total interest + salary impact   |
+| -> Flags Safe / Caution / Danger             |
++----------------------------------------------+
+        |
+        v
++----------------------------------------------+
+| Ask MentorFi - asks "What is a SIP?"         |
+| -> Edge Function returns structured answer   |
+| -> Conversation saved to Bolt Database      |
++----------------------------------------------+
+```
+## 🏗️ SYSTEM ARCHITECTURE
+
+```text
+┌───────────────────────────────────────────────────────────────┐
+│                         CLIENT (Browser)                      │
+│                                                               │
+│  ┌────────────┐  ┌─────────────┐  ┌────────────┐  ┌────────┐ │
+│  │ Navigation │  │ LandingPage │  │ BudgetPlan │  │ EMI    │ │
+│  │ Component  │  │ Component   │  │ Component  │  │ Det.   │ │
+│  └────────────┘  └─────────────┘  └────────────┘  │Component│ │
+│                                                   └────────┘ │
+│                                                               │
+│  ┌────────────┐  ┌─────────────┐  ┌──────────────┐            │
+│  │ GoalTracker│  │ AIChat      │  │ KnowledgeHub │            │
+│  │ Component  │  │ Component   │  │              │            │
+│  └────────────┘  └─────────────┘  └──────────────┘            │
+│          │               │                                    │
+│          └───────┬───────┘                                    │
+│                  ▼                                            │
+│     ┌─────────────────────────────────┐                       │
+│     │       src/lib/supabase.ts       │                       │
+│     │    (singleton instance + types) │                       │
+│     └─────────────────────────────────┘                       │
+│                  │                                            │
+└──────────────────┼────────────────────────────────────────────┘
+                   │
+          ┌────────┴─────────┐
+          │                  │
+          ▼                  ▼
+   HTTPS (REST)       HTTPS (fetch)
+   Database           Edge Function
+   PostgreSQL         invoke
+          │                  │
+          ▼                  ▼
+┌───────────────────────────────────────────────────────────────┐
+│                       DATABASE BACKEND                         │
+│                                                               │
+│  ┌──────────────────┐       ┌──────────────────────────────┐  │
+│  │   PostgreSQL DB  │       │    Edge Functions (Deno)     │  │
+│  │                  │       │                              │  │
+│  │  ┌────────────┐  │       │  ┌────────────────────────┐  │  │
+│  │  │ goals      │  │       │  │ ai-mentor              │  │  │
+│  │  ├────────────┤  │       │  │                        │  │  │
+│  │  │ chat_      │  │       │  │ • Knowledge base       │  │  │
+│  │  │ messages   │  │       │  │   (13 topics)          │  │  │
+│  │  ├────────────┤  │       │  │ • Pattern matcher      │  │  │
+│  │  │ budget_    │  │       │  │ • Fallback handler     │  │  │
+│  │  │ plans      │  │       │  │ • CORS middleware      │  │  │
+│  │  ├────────────┤  │       │  └────────────────────────┘  │  │
+│  │  │ emi_       │  │       │                              │  │
+│  │  │ analyses   │  │       │                              │  │
+│  │  └────────────┘  │       │                              │  │
+│  │                  │       │                              │  │
+│  │  Row Level       │       │                              │  │
+│  │  Security (RLS) │       │                              │  │
+│  │  policies on     │       │                              │  │
+│  │  every table     │       │                              │  │
+│  └──────────────────┘       └──────────────────────────────┘  │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+```
 
 **FUTURE SCOPE**
 
