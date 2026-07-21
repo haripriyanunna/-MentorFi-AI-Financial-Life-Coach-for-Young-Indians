@@ -40,7 +40,7 @@ Chat history persists to Bolt Database — conversations continue across session
 | **Persistence** | Database with Row Level Security (RLS) |
 
 **WORK FLOW**
-
+'''text
 User lands on MentorFi
         │
         ▼
@@ -75,7 +75,7 @@ User lands on MentorFi
 │  → Edge function returns structured answer      │
 │  → Conversation saved to Bolt Database               │
 └─────────────────────────────────────────────────┘
-
+'''
 **SYSTEM ARCHITECTURE**
 
 ┌─────────────────────────────────────────────────────────────────────┐
