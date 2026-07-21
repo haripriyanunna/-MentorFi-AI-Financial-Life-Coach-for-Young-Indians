@@ -1,17 +1,17 @@
 # MentorFi-AI Financial Life Coach for Young Indians
-**PROBLEM STATEMENT**
+## PROBLEM STATEMENT
 
 India has 100M+ first-time earners (age 21–30), yet financial literacy remains alarmingly low. Most schools and colleges don't teach personal finance — budgeting, taxation, investing, credit, EMIs, or government schemes. The result: young earners fall into common traps early — lifestyle inflation, bad EMI decisions, zero emergency fund, delayed investing, and avoidable debt.
 Existing finance apps assume you already know what to do. They track expenses or sell products but never teach. They're built for experienced earners, not someone staring at their first ₹30,000 salary wondering "what now?"
 
 The gap: No judgment-free, beginner-first, India-specific financial guide that explains concepts in plain language and turns them into actionable plans.
 
-**SOLUTION**
+## SOLUTION
 
 MentorFi is an AI-powered financial life coach designed for first-time Indian earners. It doesn't just track — it teaches, analyzes, and guides. Users arrive knowing nothing and leave with a personalized budget, a goal plan, clarity on whether that EMI is a trap, and answers to their money questions — all in simple, relatable language.
 Instead of selling financial products, MentorFi explains why decisions matter and how to think about them, then gives users tools to act on that knowledge.
 
-**APP HIGHLIGHTS**
+## APP HIGHLIGHTS
 
 **1)Budget Planner**
 2-step wizard: enter salary + city + expenses → get a personalized 50/30/20 budget split with a donut chart, category breakdowns (Needs/Savings/Wants), and tailored tips. City-aware cost adjustments for 11 Indian cities.
@@ -141,16 +141,16 @@ User lands on MentorFi
 └───────────────────────────────────────────────────────────────┘
 ```
 
-**FUTURE SCOPE**
+## FUTURE SCOPE
 
-->User authentication — migrate from single-tenant to multi-tenant ; schema already supports adding user_id + auth.uid() RLS policies
+->**User authentication** — migrate from single-tenant to multi-tenant ; schema already supports adding user_id + auth.uid() RLS policies
 
-->Recurring transaction tracking — new transactions table, auto-categorize into Needs/Savings/Wants, monthly cash-flow dashboard
+->**Recurring transaction tracking** — new transactions table, auto-categorize into Needs/Savings/Wants, monthly cash-flow dashboard
 
-->Multilingual support — Hindi, Tamil, Telugu, Bengali, Marathi interfaces + AI responses
+->**Multilingual support** — Hindi, Tamil, Telugu, Bengali, Marathi interfaces + AI responses
 
-->Personalized AI insights — weekly generated insights from user's actual transaction + goal data ("Your emergency fund is at 1.2 months — target 3")
+->**Personalized AI insights** — weekly generated insights from user's actual transaction + goal data ("Your emergency fund is at 1.2 months — target 3")
 
-->WhatsApp/Telegram bot — port AI mentor to where users already are; most young Indians use WhatsApp daily
+->**WhatsApp/Telegram bot** — port AI mentor to where users already are; most young Indians use WhatsApp daily
 
-->Credit score education — CIBIL/Experian integration with consent, paired with credit card module
+->**Credit score education** — CIBIL/Experian integration with consent, paired with credit card module
