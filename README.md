@@ -36,8 +36,8 @@ Chat history persists to Bolt Database — conversations continue across session
 | **Icons** | Lucide React |
 | **Backend** | Supabase Edge Functions (Deno) |
 | **Database** | PostgreSQL (via Supabase/Bolt) |
-| **AI / Server Logic** | Bolt Database Edge Functions (Deno) |
-| **Persistence** | Bolt Database with Row Level Security (RLS) |
+| **AI / Server Logic** | Database Edge Functions (Deno) |
+| **Persistence** | Database with Row Level Security (RLS) |
 
 **WORK FLOW**
 
@@ -58,7 +58,7 @@ User lands on MentorFi
         ▼
 ┌─────────────────────────────────────────────────┐
 │  Goal Tracker — creates goals (e.g. emergency   │
-│  fund ₹90k, bike ₹1L) → Bolt Database persists them  │
+│  fund ₹90k, bike ₹1L) → Database persists them  │
 │  → Sees progress bars + months-to-goal          │
 └─────────────────────────────────────────────────┘
         │
@@ -89,17 +89,17 @@ User lands on MentorFi
 │   │ GoalTracker │  │   AIChat    │  ┌─────────────┐               │
 │   │ Component   │  │ Component   │  │ KnowledgeHub│               │
 │   └─────────────┘  └─────────────┘  └─────────────┘               │
-│         │                │                                          │
-│         ▼                ▼                                          │
+│         │                │                                        │
+│         ▼                ▼                                         │
 │   ┌──────────────────────────────────┐                             │
-│   │      src/lib/supabase.ts         │  ← Bolt Database JS client       │
+│   │      src/lib/supabase.ts         │  ← Bolt Database JS clie    │
 │   │   (singleton instance + types)   │    (anon key auth)          │
 │   └──────────────────────────────────┘                             │
 │         │                          │                               │
 └─────────┼──────────────────────────┼───────────────────────────────┘
           │                          │
           │ HTTPS (REST)             │ HTTPS (fetch)
-          │ Bolt Database PostgREST       │ Edge Function invoke
+          │ Database PostgREST       │ Edge Function invoke
           ▼                          ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                     Database BACKEND                                │
@@ -125,16 +125,14 @@ User lands on MentorFi
 
 **FUTURE SCOPE**
 
-User authentication — migrate from single-tenant to multi-tenant ; schema already supports adding user_id + auth.uid() RLS policies
+->User authentication — migrate from single-tenant to multi-tenant ; schema already supports adding user_id + auth.uid() RLS policies
 
-Recurring transaction tracking — new transactions table, auto-categorize into Needs/Savings/Wants, monthly cash-flow dashboard
+->Recurring transaction tracking — new transactions table, auto-categorize into Needs/Savings/Wants, monthly cash-flow dashboard
 
-Gamification — goal milestones (25/50/75/100%), savings streaks, "Financial Health Score" (0–100)
+->Multilingual support — Hindi, Tamil, Telugu, Bengali, Marathi interfaces + AI responses
 
-Multilingual support — Hindi, Tamil, Telugu, Bengali, Marathi interfaces + AI responses
+->Personalized AI insights — weekly generated insights from user's actual transaction + goal data ("Your emergency fund is at 1.2 months — target 3")
 
-Personalized AI insights — weekly generated insights from user's actual transaction + goal data ("Your emergency fund is at 1.2 months — target 3")
+->WhatsApp/Telegram bot — port AI mentor to where users already are; most young Indians use WhatsApp daily
 
-WhatsApp/Telegram bot — port AI mentor to where users already are; most young Indians use WhatsApp daily
-
-Credit score education — CIBIL/Experian integration with consent, paired with credit card module
+->Credit score education — CIBIL/Experian integration with consent, paired with credit card module
